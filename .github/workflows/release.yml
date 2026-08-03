@@ -459,6 +459,10 @@ jobs:
           # Fix: mv * does not move hidden files, leaving aw-qt-tmp non-empty
           # rmdir then fails. Use rm -rf instead.
           sed -i 's/rmdir aw-qt-tmp/rm -rf aw-qt-tmp/' Makefile
+          # Keep the Rust server binary named "aw-server" (its cargo bin name)
+          # instead of "aw-server-rust". Older aw-qt builds only discover the
+          # "aw-server" module name, and aw-server.service expects ExecStart=aw-server.
+          sed -i 's|target/package/aw-server-rust|target/package/aw-server|' aw-server-rust/Makefile
           make package SKIP_SERVER_RUST=${{ matrix.skip_rust }}
 
       - name: Package AppImage
